@@ -1,0 +1,20 @@
+Glass
+Drink Carton
+Other Glass
+Battery
+Aluminum Foil
+Other Plastic
+Textile
+Cardboard
+Dead Animal
+Metal Can
+Furniture
+Paper
+Organic Waste
+Flexible Plastic
+Other hazardous
+Bulky Plastic
+Electronic
+Aerosolcan
+Construction Material
+Other Paper
