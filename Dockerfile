@@ -126,4 +126,4 @@ WORKDIR /app
 # copying all files over
 COPY . .
 # cmd to launch app when container is run
-CMD streamlit run trashout.py --server.port $PORT
+CMD streamlit run trashout_task2.py --server.port $PORT
