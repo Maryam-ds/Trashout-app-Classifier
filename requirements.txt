@@ -9,3 +9,4 @@ requests_toolbelt
 requests
 osmnx
 networkx
+scikit-image
