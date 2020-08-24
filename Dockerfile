@@ -98,7 +98,8 @@ RUN pip install enum-compat==0.0.2\
 && pip install click==7.1.2\
 && pip install networkx==2.1\
 && pip install blinker==1.4\
-&& pip install scikit-image==0.17.2
+# && pip install scikit-image==0.17.2\
+&& pip install --no-deps scikit-image
 
 ########################################################################################################################################
 # INSTALLING OSMNX WITH CONDA
