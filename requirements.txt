@@ -10,3 +10,4 @@ requests
 osmnx
 networkx
 scikit-image
+keras
