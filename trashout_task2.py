@@ -63,7 +63,7 @@ st.write('Trashout Shopping Product Classifier!')
 INCEP_LABEL_PATH = "incep_cl/trained_labels.txt"
 INCEP_MODEL_PATH = "incep_cl/trained_graph_4000.pb"
 
-# MASKRCNN_MODEL_WEIGHTS = "mrcnn/weights/mask_rcnn_trashout_0250.h5"
+MASKRCNN_MODEL_WEIGHTS = "mrcnn/weights/mask_rcnn_trashout_0250.h5"
 
 
 option_model_first = st.sidebar.radio("Choose Option",options = ['Run product classifier','Regulations information'])
@@ -82,8 +82,8 @@ if option_model_first == 'Run product classifier':
         image = Image.open(load_image)
         st.image(image, caption='Uploaded Image.', width = 160) 
         #st.set_option('deprecation.showfileUploaderEncoding', False)
-#         option_model = st.selectbox("Choose Model" , options = ['Select Model','Inception','MaskRcnn'])
-        option_model = st.selectbox("Choose Model" , options = ['Select Model','Inception'])
+        option_model = st.selectbox("Choose Model" , options = ['Select Model','Inception','MaskRcnn'])
+#         option_model = st.selectbox("Choose Model" , options = ['Select Model','Inception'])
         if (option_model == "Inception"):
             if st.button('Get Classification'):
                 image = Image.open(load_image)
@@ -106,18 +106,18 @@ if option_model_first == 'Run product classifier':
                 #image_label = 'Felxible Plastic'
                 st.image([image], image_label, width=160)  # output dyptich
 
-#         elif (option_model == "MaskRcnn"):
-#             if st.button('Get Classification'):
-#                 image = Image.open(load_image)
-#                 load_image = image.convert('RGB')
-#                 load_image.save('im.jpg', format="JPEG")
-#                 model =get_model(MASKRCNN_MODEL_WEIGHTS,'cpu')
-#                 cats=predict('im.jpg',model)
-#                 answer = cats[0]
-#                 print(answer)
-#                 image_label = answer
-#                 #image_label = 'Felxible Plastic'
-#                 st.image([image], image_label, width=160)  # output dyptich
+        elif (option_model == "MaskRcnn"):
+            if st.button('Get Classification'):
+                image = Image.open(load_image)
+                load_image = image.convert('RGB')
+                load_image.save('im.jpg', format="JPEG")
+                model =get_model(MASKRCNN_MODEL_WEIGHTS,'cpu')
+                cats=predict('im.jpg',model)
+                answer = cats[0]
+                print(answer)
+                image_label = answer
+                #image_label = 'Felxible Plastic'
+                st.image([image], image_label, width=160)  # output dyptich
 
         
 if option_model_first == 'Regulations information':
