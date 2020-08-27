@@ -63,7 +63,7 @@ st.write('Trashout Shopping Product Classifier!')
 INCEP_LABEL_PATH = "incep_cl/trained_labels.txt"
 INCEP_MODEL_PATH = "incep_cl/trained_graph_4000.pb"
 
-# MASKRCNN_MODEL_WEIGHTS = "mrcnn/weights/mask_rcnn_tra# option_model = st.sidebar.radio("Choose Option",options = ['Run product classifier','Regulations information'])shout_0250.h5"
+MASKRCNN_MODEL_WEIGHTS = "mrcnn/weights/mask_rcnn_trashout_0250.h5"
 
 
 # option_model_first = st.sidebar.radio("Choose Option",options = ['Run product classifier','Regulations information'])
