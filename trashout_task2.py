@@ -63,10 +63,13 @@ st.write('Trashout Shopping Product Classifier!')
 INCEP_LABEL_PATH = "incep_cl/trained_labels.txt"
 INCEP_MODEL_PATH = "incep_cl/trained_graph_4000.pb"
 
-# MASKRCNN_MODEL_WEIGHTS = "mrcnn/weights/mask_rcnn_trashout_0250.h5"
+# MASKRCNN_MODEL_WEIGHTS = "mrcnn/weights/mask_rcnn_tra# option_model = st.sidebar.radio("Choose Option",options = ['Run product classifier','Regulations information'])shout_0250.h5"
 
 
-option_model_first = st.sidebar.radio("Choose Option",options = ['Run product classifier','Regulations information'])
+# option_model_first = st.sidebar.radio("Choose Option",options = ['Run product classifier','Regulations information'])
+option_model = st.sidebar.radio("Choose Option",options = ['Run product classifier','Regulations information'])
+
+
 
 #Loads label file, strips off carriage return
 label_lines = [line.rstrip() for line in tf.io.gfile.GFile(INCEP_LABEL_PATH)]
@@ -76,14 +79,14 @@ with tf.compat.v1.gfile.FastGFile(INCEP_MODEL_PATH, "rb") as f:
     graph_def.ParseFromString(f.read())
     _ = tf.import_graph_def(graph_def, name="")
 
-if option_model_first == 'Run product classifier':  
+if option_model == 'Run product classifier':  
     load_image = uploaded_file = st.file_uploader("Load image", type=['jpg','png','jpeg'])
     if load_image is not None:
         image = Image.open(load_image)
         st.image(image, caption='Uploaded Image.', width = 160) 
         #st.set_option('deprecation.showfileUploaderEncoding', False)
-#         option_model = st.selectbox("Choose Model" , options = ['Select Model','Inception','MaskRcnn'])
-        option_model = st.selectbox("Choose Model" , options = ['Select Model','Inception'])
+        option_model = st.selectbox("Choose Model" , options = ['Select Model','Inception','MaskRcnn'])
+#         option_model = st.selectbox("Choose Model" , options = ['Select Model','Inception'])
         if (option_model == "Inception"):
             if st.button('Get Classification'):
                 image = Image.open(load_image)
@@ -106,27 +109,31 @@ if option_model_first == 'Run product classifier':
                 #image_label = 'Felxible Plastic'
                 st.image([image], image_label, width=160)  # output dyptich
 
-#         elif (option_model == "MaskRcnn"):
-#             if st.button('Get Classification'):
-#                 image = Image.open(load_image)
-#                 load_image = image.convert('RGB')
-#                 load_image.save('im.jpg', format="JPEG")
-#                 model =get_model(MASKRCNN_MODEL_WEIGHTS,'cpu')
-#                 cats=predict('im.jpg',model)
-#                 answer = cats[0]
-#                 print(answer)
-#                 image_label = answer
-#                 #image_label = 'Felxible Plastic'
-#                 st.image([image], image_label, width=160)  # output dyptich
+        elif (option_model == "MaskRcnn"):
+            if st.button('Get Classification'):
+                image = Image.open(load_image)
+                load_image = image.convert('RGB')
+                load_image.save('im.jpg', format="JPEG")
+                model =get_model(MASKRCNN_MODEL_WEIGHTS,'cpu')
+                cats=predict('im.jpg',model)
+                answer = cats[0]
+                print(answer)
+                image_label = answer
+                #image_label = 'Felxible Plastic'
+                st.image([image], image_label, width=160)  # output dyptich
 
-        
-if option_model_first == 'Regulations information':
-    final_array = []
+
+req_cols= ['City', 'Item Description', 'Disposal Category', 'Disposal Instructions']
+updated_df = pd.DataFrame(columns = req_cols)
+if option_model == 'Regulations information':
+    
+    final_df = pd.DataFrame(columns =req_cols)
+    
     cg_data = pd.read_csv("communityGuidelines.csv",   engine='python')
-    req_cols= ['City', 'Item Description', 'Disposal Category', 'Disposal Instructions']
     df = cg_data[req_cols]
-    cities = ( "Bangalore","Toronto", "Vancouver", "Angers" )
-    city= st.selectbox("Select city", cities)
+    cities = df.drop_duplicates(subset='City')
+    cities_list = cities['City'].tolist()
+    city= st.selectbox("Select city", cities_list)
     image_label_df= df.drop_duplicates(subset='Disposal Category')
     list_imagelabel = image_label_df['Disposal Category'].tolist()
     select_dc = st.selectbox("Select object" , options = list_imagelabel)
@@ -139,10 +146,31 @@ if option_model_first == 'Regulations information':
             st.write(city, 'guideline for disposing ',select_dc, 'is not available')
         else:
             st.write(city, 'guideline for disposing ',select_dc,': ', str(disposal_instr))
-
-
-
-
-
-
-
+    
+    st.text("Can't find the disposal guidelines here and want to add it to our database ?")
+    st.text("Fill up the slots below and we shall add it in")
+    city_input = st.text_input("Enter the city for which you found the guideline")
+    
+    final_df['City'] = pd.Series(city_input)
+    Item_Description = st.text_input("Provide an item description - example(glass bottle,plastic can,etc")
+    
+    final_df['Item Description'] = Item_Description
+    Disposal_Category = st.text_input("Provide the disposal category - example(organicwaste,plastic,textile,glass,etc)")
+    
+    final_df['Disposal Category']= Disposal_Category
+    Disposal_Instructions = st.text_input("Provide the disposal instructions")
+    
+    final_df['Disposal Instructions']= Disposal_Instructions
+    
+    add_data = st.button("Add info")
+    if add_data :
+        final_df
+        df
+        
+        updated_df = updated_df.append(df)
+        updated_df = updated_df.append(final_df)
+        updated_df
+        updated_df.to_csv("communityGuidelines.csv",index =False)
+        final_df= final_df[0:0]      
+        
+    
